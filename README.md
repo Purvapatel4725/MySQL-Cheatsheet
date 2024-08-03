@@ -12,6 +12,7 @@ Once you enter the MySQL CLI, you will need to use “;” for it to interpret t
 
 To get a deeper understanding of regex expressions used in SQL, here's a handy reference table:
 
+![Regex](image.png)
 
 ## Installation Steps
 
