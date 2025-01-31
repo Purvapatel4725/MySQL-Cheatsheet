@@ -247,15 +247,27 @@ By following these commands, you can efficiently manage databases and tables usi
 
 ---
 ### Example of how to create an efficent ddatabase:
-Here are the reuirements from which we have to built our model:
+**Here are the reuirements from which we have to built our model:**
 
+- Every person has a name and an address. A person is uniquely identified by their name
+- There are two groups of persons, staff and students. A person can be a student and staff at the same time
+- Every staff receives a salary, while every student pays a fee.
+- Among the staff, there is research and teaching staff. A staff can belong to both groups.
+- Among the teaching staff, there are lecturers and TAs. A TA works for several courses. (course does not need to be an entity, just add a courseID attribute to an entity TA)
+- Every student is either a graduate student or an undergraduate student.
+- A graduate student has a thesis title, on which he/she is working.
+- An undergrad is in the final year if he/she is in his/her 4th year.
+- Every final year student is working on a project.
+- Every final year student is supervised by a member of the teaching staff.
 
-
-We will then build a appropriate ER Diagram based on the above requirements:
+**We will then build a appropriate ER Diagram based on the above requirements:**
 
 ![ERdiagram](img2.png)
 
-Let's make a Relational Model from the above diagram:
+Note:
+
+**Let's make a Relational Model from the above diagram:**
+
 ```text
 Person(name, address)
 PK: name
@@ -302,7 +314,7 @@ FK: Supervisor(student_name) references FinalYear(name)
 FK: Supervisor(supervisor_name) references Employee(name)
 
 ```
-Write the database code from the above Relational Model:
+**Write the database code from the above Relational Model:**
 
 ```sql
 -- Create the database
