@@ -243,13 +243,67 @@ To get a deeper understanding of regex expressions used in SQL, here's a handy r
 
 ---
 
-By following these commands, you can efficiently manage databases and tables using MySQL on a Linux terminal. Each command is designed to be intuitive, making it easier for you to navigate and manipulate your data.
+By following these commands, you can efficiently manage databases and tables using MySQL on a Linux terminal.
 
 ---
 ### Example of how to create an efficent ddatabase:
-We will use the following ER Diagram for this:
+Here are the reuirements from which we have to built our model:
+
+
+
+We will then build a appropriate ER Diagram based on the above requirements:
+
 ![ERdiagram](img2.png)
-### Here is the code
+
+Let's make a Relational Model from the above diagram:
+```text
+Person(name, address)
+PK: name
+
+Employee(name, salary)
+PK: name
+FK: Employee(name) references Person(name)
+Research(name)
+PK: name
+FK: Research(name) references Employee(name)
+
+Teaching(name)
+PK: name
+FK: Teaching(name) references Employee(name)
+
+Lecturer(name)
+PK: name
+FK: Lecturer(name) references Teaching(name)
+
+Tutor(name, courseno)
+PK: name
+FK: Tutor(name) references Teaching(name)
+
+Student(name, fee)
+PK: name
+FK: Student(name) references Person(name)
+
+PostGrad(name, thesis)
+PK: name
+FK: PostGrad(name) references Student(name)
+
+UnderGrad(name, year)
+PK: name
+FK: UnderGrad(name) references Student(name)
+
+FinalYear(name, project)
+PK: name
+FK: FinalYear(name) references UnderGrad(name)
+Constraint: year = 4
+
+Supervisor(student_name, supervisor_name)
+PK: (student_name, supervisor_name)
+FK: Supervisor(student_name) references FinalYear(name)
+FK: Supervisor(supervisor_name) references Employee(name)
+
+```
+Write the database code from the above Relational Model:
+
 ```sql
 -- Create the database
 CREATE DATABASE UniversityDB;
