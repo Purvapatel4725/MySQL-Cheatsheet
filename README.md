@@ -246,5 +246,101 @@ To get a deeper understanding of regex expressions used in SQL, here's a handy r
 By following these commands, you can efficiently manage databases and tables using MySQL on a Linux terminal. Each command is designed to be intuitive, making it easier for you to navigate and manipulate your data.
 
 ---
+### Example of how to create an efficent ddatabase:
+We will use the following ER Diagram for this:
+
+### Here is the code
+```sql
+-- Create the database
+CREATE DATABASE UniversityDB;
+USE UniversityDB;
+
+-- Person Table
+CREATE TABLE Person (
+    name VARCHAR(100) PRIMARY KEY,
+    address VARCHAR(255) NOT NULL
+);
+
+-- Employee Table (Overlapping with Student)
+CREATE TABLE Employee (
+    name VARCHAR(100) PRIMARY KEY,
+    salary DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (name) REFERENCES Person(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Student Table (Overlapping with Employee)
+CREATE TABLE Student (
+    name VARCHAR(100) PRIMARY KEY,
+    fee DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (name) REFERENCES Person(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Teaching and Research (Disjoint Specialization of Employee)
+CREATE TABLE Teaching (
+    name VARCHAR(100) PRIMARY KEY,
+    FOREIGN KEY (name) REFERENCES Employee(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Research (
+    name VARCHAR(100) PRIMARY KEY,
+    FOREIGN KEY (name) REFERENCES Employee(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Lecturer and Tutor (Disjoint Specialization of Teaching)
+CREATE TABLE Lecturer (
+    name VARCHAR(100) PRIMARY KEY,
+    FOREIGN KEY (name) REFERENCES Teaching(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Tutor (
+    name VARCHAR(100) PRIMARY KEY,
+    courseno VARCHAR(50) NOT NULL,
+    FOREIGN KEY (name) REFERENCES Teaching(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Undergraduate and Postgraduate (Disjoint Specialization of Student)
+CREATE TABLE UnderGrad (
+    name VARCHAR(100) PRIMARY KEY,
+    year INT NOT NULL CHECK (year BETWEEN 1 AND 4),  -- Year must be between 1 and 4
+    FOREIGN KEY (name) REFERENCES Student(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE PostGrad (
+    name VARCHAR(100) PRIMARY KEY,
+    thesis VARCHAR(255) NOT NULL,
+    FOREIGN KEY (name) REFERENCES Student(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Final Year (Now only stores students from UnderGrad with year = 4)
+CREATE TABLE FinalYear (
+    name VARCHAR(100) PRIMARY KEY,
+    project VARCHAR(255) NOT NULL,
+    FOREIGN KEY (name) REFERENCES UnderGrad(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Supervisor Relationship (m:n between Employee and FinalYear)
+CREATE TABLE Supervisor (
+    student_name VARCHAR(100),
+    supervisor_name VARCHAR(100),
+    PRIMARY KEY (student_name, supervisor_name),
+    FOREIGN KEY (student_name) REFERENCES FinalYear(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (supervisor_name) REFERENCES Employee(name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Stored Procedure to Auto-Insert into FinalYear if year = 4
+DELIMITER //
+CREATE TRIGGER InsertFinalYear
+AFTER INSERT ON UnderGrad
+FOR EACH ROW
+BEGIN
+    IF NEW.year = 4 THEN
+        INSERT INTO FinalYear (name, project)
+        VALUES (NEW.name, 'Default Project'); 
+    END IF;
+END;
+//
+DELIMITER ;
+
+```
 
 Author: **Purva Patel**
