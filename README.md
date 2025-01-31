@@ -248,7 +248,7 @@ By following these commands, you can efficiently manage databases and tables usi
 ---
 ### Example of how to create an efficent ddatabase:
 We will use the following ER Diagram for this:
-
+![ERdiagram](img2.png)
 ### Here is the code
 ```sql
 -- Create the database
