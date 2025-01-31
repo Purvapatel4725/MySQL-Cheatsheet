@@ -264,7 +264,13 @@ By following these commands, you can efficiently manage databases and tables usi
 
 ![ERdiagram](img2.png)
 
-Note:
+**In the given ER diagram:**
+
+- Entities (Tables) are represented by blue rectangular boxes.
+- Attributes (Columns) are shown as green circles, connected to their respective entities.
+- Relationships between entities are depicted using purple diamond shapes.
+- A single line between an entity and a relationship indicates partial participation, meaning not all instances of the entity must participate in that relationship.
+- A double line signifies total participation, meaning every instance of that entity must be involved in the relationship.
 
 **Let's make a Relational Model from the above diagram:**
 
